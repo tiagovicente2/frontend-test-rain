@@ -1,8 +1,18 @@
-import React from 'react';
+import { useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
+import pokeapi from './services/pokeapi'
+
 function App() {
+  useEffect(() => {
+    pokeapi.pokemons.list({
+      limit: 10,
+      offset: 0,
+    })
+      .then(console.log)
+  }, [])
+
   return (
     <div className="App">
       <header className="App-header">
