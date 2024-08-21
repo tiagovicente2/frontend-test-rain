@@ -1,7 +1,5 @@
 # Rain Instant Pay Frontend Test
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
 Create a Pokédex that will allow the user to see a list of Pokémons and save its favorites on a separate list.
 
 The application must provide:

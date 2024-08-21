@@ -1,36 +1,20 @@
 import { useEffect } from 'react';
-import logo from './logo.svg';
-import './App.css';
 
-import pokeapi from './services/pokeapi'
+import { pokemons } from './services/pokeapi'
 
-function App() {
+export const App = () => {
   useEffect(() => {
-    pokeapi.pokemons.list({
+    pokemons.list({
       limit: 10,
-      offset: 0,
     })
-      .then(console.log)
   }, [])
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+    <div>
+      <header>
+        <h2 style={{ fontSize: '2.5em' }}>Rain Pokedex Test</h2>
       </header>
+      <p style={{ fontSize: '2em' }}>Any files from the components to the webpack config can be modified, feel free to setup the project for your needs.</p>
     </div>
   );
 }
-
-export default App;

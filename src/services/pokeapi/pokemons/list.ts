@@ -1,90 +1,22 @@
-import { gql, request } from 'graphql-request'
+import { endpoint } from '../config'
 
-import { endpoint, sprites } from '../config'
-import { Pokemon } from './interfaces'
-
-const PokemonInfo = gql`
-  fragment PokemonInfo on pokemon_v2_pokemon {
-    id
-    name
-
-    types: pokemon_v2_pokemontypes {
-      slot
-      type: pokemon_v2_type {
-        name
-      }
-    }
-  }
-`
-
-const queryByIds = gql`
-  ${PokemonInfo}
-
-  query findSpecies($offset: Int!, $limit: Int!, $name: String!, $ids: [Int!]) {
-    species: pokemon_v2_pokemon(
-      offset: $offset, limit: $limit,
-      order_by: { id: asc },
-      where: { name: { _iregex: $name }, id: { _in: $ids } }
-    ) {
-      ...PokemonInfo
-    }
-  }
-`
-
-const queryByName = gql`
-  ${PokemonInfo}
-
-  query findSpecies($offset: Int!, $limit: Int!, $name: String!) {
-    species: pokemon_v2_pokemon(
-      offset: $offset, limit: $limit,
-      order_by: { id: asc },
-      where: { name: { _iregex: $name } }
-    ) {
-      ...PokemonInfo
-    }
-  }
-`
-
-type Variables = {
-  offset: number
-  name: string
+export type Payload = {
   limit: number
-  ids: number[]
 }
 
-type Response = {
-  species: Pokemon[]
+export type Response = {
+  count: number;
+  next: string;
+  previous: string | null;
+  results: {
+    name: string;
+    url: string;
+  }[]
 }
 
-const listByIds = (variables: Variables) => request<Response, Variables>(
-  endpoint, queryByIds, variables
-)
+export const list = async (payload: Payload): Promise<Response> => {
+  const response = await fetch(`${endpoint}pokemon?limit=${payload.limit}`)
 
-const listByNames = (variables: Variables) => {
-  const { ids, ...queryVars } = variables
-
-  return request<Response, Omit<Variables, 'ids'>>(
-    endpoint, queryByName, queryVars
-  )
-}
-
-const defaultVariables: Variables = {
-  limit: 10, name: '', offset: 0, ids: []
-}
-
-export const list = async (variables: Partial<Variables> = {}): Promise<Pokemon[]> => {
-  const queryVars = { ...defaultVariables, ...variables }
-
-  const listRequest = queryVars.ids.length
-    ? listByIds
-    : listByNames
-
-  const { species } = await listRequest(queryVars)
-
-  const speciesWithSprites = species.map(specy => ({
-    ...specy,
-    sprite: `${sprites}/sprites/pokemon/${specy.id}.png`,
-  }))
-
-  return speciesWithSprites
+  const json: Response = await response.json()
+  return json
 }

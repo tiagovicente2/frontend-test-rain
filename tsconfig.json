@@ -18,9 +18,18 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+     "paths": {
+        "react": ["./node_modules/@types/react"]
+     }
   },
-  "include": [
-    "src"
-  ]
+  "ts-node": {
+    "files": true,
+    "compilerOptions": {
+      "module": "CommonJS",
+      "allowSyntheticDefaultImports": true,
+      "esModuleInterop": true
+    }
+  },
+  "include": ["src", "./.jest/setup.ts"]
 }
