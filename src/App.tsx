@@ -1,20 +1,23 @@
-import { useEffect } from 'react';
+import { Routes, Route } from 'react-router-dom'
 
-import { pokemons } from './services/pokeapi'
+import { LoginPage } from './pages/Login'
+import { HomePage } from './pages/Home'
 
-export const App = () => {
-  useEffect(() => {
-    pokemons.list({
-      limit: 10,
-    })
-  }, [])
+import { Favorites } from './components/Favorites'
+import { Pokemons } from './components/Pokemons'
+import { AuthProvider } from './hooks/useAuth'
 
+const App = () => {
   return (
-    <div>
-      <header>
-        <h2 style={{ fontSize: '2.5em' }}>Rain Pokedex Test</h2>
-      </header>
-      <p style={{ fontSize: '2em' }}>Any files from the components to the webpack config can be modified, feel free to setup the project for your needs.</p>
-    </div>
-  );
+    <AuthProvider>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+
+        <Route path="pokemons" element={<Favorites />} />
+        <Route path="favorites" element={<Pokemons />} />
+      </Routes>
+    </AuthProvider>
+  )
 }
+
+export default App

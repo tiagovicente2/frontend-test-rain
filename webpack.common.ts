@@ -7,26 +7,27 @@ const config: Configuration = {
   output: {
     clean: true,
     path: path.resolve(__dirname, 'dist'),
+    publicPath: '/'
   },
   resolve: {
-    extensions: ['.js', '.ts', '.tsx', '.json'],
+    extensions: ['.js', '.ts', '.tsx', '.json']
   },
   module: {
     rules: [
       {
         test: /\.tsx?$/,
         loader: 'babel-loader',
-        exclude: /node_modules/,
-      },
-    ],
+        exclude: /node_modules/
+      }
+    ]
   },
   plugins: [
     new HtmlWebpackPlugin({
       publicPath: '/',
       template: './public/index.html',
-      minify: true,
+      minify: true
     })
-  ],
+  ]
 }
 
 export default config

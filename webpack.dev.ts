@@ -12,12 +12,13 @@ const config: Configuration = merge<Configuration>(common, {
   devServer: {
     port: 3001,
     static: {
-      directory: path.resolve(__dirname, 'public'),
+      directory: path.resolve(__dirname, 'public')
     },
+    historyApiFallback: true
   },
   optimization: {
-    minimize: false,
-  },
+    minimize: false
+  }
 })
 
 export default config
