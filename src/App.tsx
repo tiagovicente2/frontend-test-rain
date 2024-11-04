@@ -1,10 +1,10 @@
 import { Routes, Route } from 'react-router-dom'
 
-import { LoginPage } from './pages/Login'
-import { HomePage } from './pages/Home'
+import LoginPage from './pages/Login'
+import HomePage from './pages/Home'
 
-import { Favorites } from './components/Favorites'
-import { Pokemons } from './components/Pokemons'
+import Favorites from './components/favorites'
+import Pokemons from './components/pokemons'
 import { AuthProvider } from './hooks/useAuth'
 
 const App = () => {

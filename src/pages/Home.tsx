@@ -1,23 +1,29 @@
+import { useState } from 'react'
 import { useAuth } from '../hooks/useAuth'
 
-import { LoginPage } from './Login'
+import LoginPage from './Login'
 
-import { Favorites } from '../components/Favorites'
-import { Pokemons } from '../components/Pokemons'
+import Favorites from '../components/favorites'
+import Pokemons from '../components/pokemons'
+import Layout from '../components/layout'
+import Menu from '../components/menu'
+import SearchBar from '../components/searchBar'
 
-export const HomePage = () => {
-  const { user } = useAuth()
+const HomePage = () => {
+  // const { user } = useAuth()
 
   // if (!user) {
   //   return <LoginPage />
   // }
 
+  const [activeMenu, setActiveMenu] = useState<string>('pokemons')
+
   return (
-    <>
-      <header />
-      <Favorites />
-      <Pokemons />
-      <footer />
-    </>
+    <Layout activeMenu={activeMenu} setActiveMenu={setActiveMenu}>
+      <SearchBar />
+      {activeMenu === 'pokemons' ? <Pokemons /> : <Favorites />}
+    </Layout>
   )
 }
+
+export default HomePage

@@ -3,7 +3,7 @@ import { useAuth } from '../hooks/useAuth'
 
 import { Navigate } from 'react-router-dom'
 
-export const LoginPage = () => {
+const LoginPage = () => {
   const { user, login } = useAuth()
 
   const [username, setUsername] = useState('')
@@ -48,3 +48,5 @@ export const LoginPage = () => {
     </div>
   )
 }
+
+export default LoginPage
