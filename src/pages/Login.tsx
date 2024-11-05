@@ -81,14 +81,13 @@ const LoginPage = () => {
 
   const disabled = !!username && !!password
 
-  if (user) {
-    return <Navigate to="/" />
-  }
+  if (user) return <Navigate to="/" />
 
   const handleLogin = async (e: any) => {
     e.preventDefault()
+
     if (username === 'user' && password === 'user') {
-      return login(username, () => ({}))
+      return login()
     }
 
     return alert('Invalid username or password')
@@ -131,7 +130,7 @@ const LoginPage = () => {
           placeholder="your password"
           onChange={(e) => setPassword(e.target.value)}
         />
-        <Button type="submit" disabled={!disabled} onClick={handleLogin}>
+        <Button type="submit" disabled={!disabled}>
           Login
         </Button>
       </form>

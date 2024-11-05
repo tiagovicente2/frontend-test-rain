@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import styled from 'styled-components'
 import Menu from './menu'
@@ -31,23 +31,17 @@ export const Title = styled.h1`
   left: 4rem;
   position: absolute;
 `
-type LayoutProps = {
-  children: React.ReactNode
+interface LayoutProps {
   activeMenu: string
-  setActiveMenu: (value: string) => void
+  children: React.ReactNode
 }
 
-const Layout = (props: LayoutProps) => {
-  const { children, activeMenu, setActiveMenu } = props
-
+const Layout = ({ activeMenu, children }: LayoutProps) => {
   return (
     <Container>
       <Header>
         <Title>Pokedex</Title>
-        <Menu
-          activeMenu={activeMenu}
-          activate={(value: string) => setActiveMenu(value)}
-        />
+        <Menu activeMenu={activeMenu} />
       </Header>
       {children}
       <Footer />

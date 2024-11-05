@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import styled from 'styled-components'
 
@@ -31,24 +32,27 @@ const MenuItem = styled.div<{ isActive: boolean }>`
 
 interface MenuProps {
   activeMenu: string
-  activate: (value: string) => void
 }
 
-const Menu = (props: MenuProps) => {
-  const { activeMenu, activate } = props
+const Menu = ({ activeMenu }: MenuProps) => {
+  const navigate = useNavigate()
+
+  const handleClick = (value: string) => {
+    navigate(value === 'pokemons' ? '/' : '/favorites')
+  }
 
   return (
     <MenuContainer>
       <MenuItem
         isActive={activeMenu === 'pokemons'}
-        onClick={() => activate('pokemons')}
+        onClick={() => handleClick('pokemons')}
       >
         Pokemons
       </MenuItem>
 
       <MenuItem
         isActive={activeMenu === 'favorites'}
-        onClick={() => activate('favorites')}
+        onClick={() => handleClick('favorites')}
       >
         Favorites
       </MenuItem>

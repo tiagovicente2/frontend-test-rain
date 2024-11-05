@@ -43,17 +43,33 @@ const Icon = styled.img`
   background-color: transparent;
 `
 
-const SearchBar = () => {
-  const handleSearch = (e: any) => {
+interface SearchBarProps {
+  onSearch: (value: string) => void
+}
+
+const SearchBar = ({ onSearch }: SearchBarProps) => {
+  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    console.log('clicked')
+    const formData = new FormData(e.currentTarget)
+    const searchValue = formData.get('search') as string
+
+    onSearch(searchValue)
+  }
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    onSearch(e.target.value)
   }
 
   return (
     <SearchBarContainer>
       <Icon src={SearchIcon} />
       <Form onSubmit={handleSearch}>
-        <Input type="text" placeholder="Search a pokemon by name" />
+        <Input
+          type="text"
+          name="search"
+          placeholder="Search a pokemon by name"
+          onChange={handleChange}
+        />
 
         <div style={{ width: '100px' }}>
           <Button type="submit">Search</Button>

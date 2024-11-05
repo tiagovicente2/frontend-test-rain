@@ -4,13 +4,13 @@ export type Payload = {
   limit: number
 }
 
-export type Response = {
-  count: number;
-  next: string;
-  previous: string | null;
+export type PokeApiResponse = {
+  count: number
+  next: string
+  previous: string | null
   results: {
-    name: string;
-    url: string;
+    name: string
+    url: string
   }[]
 }
 

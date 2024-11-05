@@ -1,27 +1,59 @@
-import { useState } from 'react'
-import { useAuth } from '../hooks/useAuth'
+import { useEffect, useState } from 'react'
 
-import LoginPage from './Login'
-
-import Favorites from '../components/favorites'
-import Pokemons from '../components/pokemons'
 import Layout from '../components/layout'
-import Menu from '../components/menu'
 import SearchBar from '../components/searchBar'
+import { PokemonProps } from '../components/pokemon'
+import Pokemons from '../components/pokemons'
+
+import useLocalStorage from '../hooks/useLocalStorage'
+
+import { pokemons } from '../services/pokeapi'
+import { PokeApiResponse } from '../services/pokeapi/pokemons'
 
 const HomePage = () => {
-  // const { user } = useAuth()
+  const [favPoke, setFavPoke] = useLocalStorage('favPoke', [])
+  const [list, setList] = useState<PokeApiResponse>({} as PokeApiResponse)
+  const [search, setSearch] = useState('')
 
-  // if (!user) {
-  //   return <LoginPage />
-  // }
+  const handleFavorite = (poke: PokemonProps) => {
+    if (favPoke.find((item: PokemonProps) => item.id === poke.id)) {
+      setFavPoke(favPoke.filter((item: PokemonProps) => item.id !== poke.id))
 
-  const [activeMenu, setActiveMenu] = useState<string>('pokemons')
+      return
+    }
+
+    const favs = [...favPoke, poke]
+    const sortedFavs = favs.sort((poke1, poke2) => poke1.id - poke2.id)
+
+    setFavPoke(sortedFavs)
+  }
+
+  useEffect(() => {
+    Promise.all([
+      pokemons.list({
+        limit: 10
+      })
+    ])
+      .then(([data]) => {
+        setList(data as any)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }, [])
+
+  const handleSearch = (searchTerm: string) => {
+    setSearch(searchTerm)
+  }
 
   return (
-    <Layout activeMenu={activeMenu} setActiveMenu={setActiveMenu}>
-      <SearchBar />
-      {activeMenu === 'pokemons' ? <Pokemons /> : <Favorites />}
+    <Layout activeMenu="pokemons">
+      <SearchBar onSearch={handleSearch} />
+      <Pokemons
+        pokes={list?.results}
+        favPoke={favPoke}
+        handleFavorite={handleFavorite}
+      />
     </Layout>
   )
 }

@@ -1,25 +1,26 @@
 import { createContext, useContext, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import useLocalStorage from './useLocalStorage'
 
 interface AuthContextType {
-  user: any
-  login: (user: string, callback: () => {}) => void
-  logout: (callback: () => {}) => void
+  user: boolean
+  login: () => void
+  logout: () => void
 }
 
 const AuthContext = createContext<AuthContextType>({} as AuthContextType)
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<any>(null)
+  const [user, setUser] = useLocalStorage('user', false)
   const navigate = useNavigate()
 
-  const login = async (data: string) => {
-    setUser(data)
+  const login = async () => {
+    setUser(true)
     navigate('/')
   }
 
   const logout = () => {
-    setUser(null)
+    setUser(false)
     navigate('/', { replace: true })
   }
 
