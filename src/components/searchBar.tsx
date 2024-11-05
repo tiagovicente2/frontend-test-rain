@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import SearchIcon from '../assets/searchIcon.svg'
+import { Button } from '../pages/Login'
 
 const SearchBarContainer = styled.div`
   display: flex;
@@ -9,22 +10,24 @@ const SearchBarContainer = styled.div`
   width: 60%;
   height: auto;
   margin: 1rem 0;
+  padding: 0 1rem;
 
-  border: 2px solid #3b4cca;
+  border: 2px solid #3763d2;
   border-radius: 5px;
 `
 
 const Input = styled.input`
   width: 100%;
-  height: 4rem;
+  height: 3rem;
 
   border: none;
-  font-family: 'Pokemon Solid', sans-serif;
-  color: #3b4cca;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 600;
+  color: #3763d2;
   outline: none;
 
   &:placeholder {
-    color: #3b4ccaa6;
+    color: #3763d2;
   }
 `
 
@@ -33,13 +36,17 @@ const SearchBar = () => (
     <img
       src={SearchIcon}
       style={{
-        width: '15px',
-        height: '15px',
-        margin: '0 3px',
+        width: '20px',
+        height: '20px',
+        marginRight: '5px',
         backgroundColor: 'transparent'
       }}
     />
-    <Input type="text" placeholder="Search" />
+    <Input type="text" placeholder="Search a pokemon by name" />
+
+    <div style={{ width: '100px' }}>
+      <Button onClick={() => console.log('clicked')}>Search</Button>
+    </div>
   </SearchBarContainer>
 )
 

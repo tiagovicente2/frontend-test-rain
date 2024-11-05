@@ -12,6 +12,7 @@ const App = () => {
     <AuthProvider>
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<LoginPage />} />
 
         <Route path="pokemons" element={<Favorites />} />
         <Route path="favorites" element={<Pokemons />} />

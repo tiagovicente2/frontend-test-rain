@@ -22,12 +22,12 @@ const Footer = styled.footer`
   background-color: red;
 `
 
-const Title = styled.h1`
+export const Title = styled.h1`
   color: white;
   text-align: center;
   font-size: 30px;
   font-family: 'Pokemon Solid', sans-serif;
-  color: #3b4cca;
+  color: #3763d2;
   left: 1rem;
   position: absolute;
 `

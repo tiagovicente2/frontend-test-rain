@@ -20,14 +20,9 @@ const MenuItem = styled.div<{ isActive: boolean }>`
   height: 2rem;
 
   font-family: 'Pokemon Solid', sans-serif;
-  color: #cc0000;
+  color: #3763d2;
 
-  ${(props) =>
-    props.isActive &&
-    `
-    border-bottom: 2px solid #FFDE00;
-
-    `}
+  border-bottom: ${({ isActive }) => (isActive ? '2px solid #ffcb05' : 'none')};
 
   &:hover {
     cursor: pointer;
