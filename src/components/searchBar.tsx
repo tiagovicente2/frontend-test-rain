@@ -31,23 +31,36 @@ const Input = styled.input`
   }
 `
 
-const SearchBar = () => (
-  <SearchBarContainer>
-    <img
-      src={SearchIcon}
-      style={{
-        width: '20px',
-        height: '20px',
-        marginRight: '5px',
-        backgroundColor: 'transparent'
-      }}
-    />
-    <Input type="text" placeholder="Search a pokemon by name" />
+const Form = styled.form`
+  display: flex;
+  align-items: center;
+  width: 100%;
+`
 
-    <div style={{ width: '100px' }}>
-      <Button onClick={() => console.log('clicked')}>Search</Button>
-    </div>
-  </SearchBarContainer>
-)
+const Icon = styled.img`
+  width: 20px;
+  margin-right: 5px;
+  background-color: transparent;
+`
+
+const SearchBar = () => {
+  const handleSearch = (e: any) => {
+    e.preventDefault()
+    console.log('clicked')
+  }
+
+  return (
+    <SearchBarContainer>
+      <Icon src={SearchIcon} />
+      <Form onSubmit={handleSearch}>
+        <Input type="text" placeholder="Search a pokemon by name" />
+
+        <div style={{ width: '100px' }}>
+          <Button type="submit">Search</Button>
+        </div>
+      </Form>
+    </SearchBarContainer>
+  )
+}
 
 export default SearchBar

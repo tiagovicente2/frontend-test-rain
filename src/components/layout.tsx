@@ -28,7 +28,7 @@ export const Title = styled.h1`
   font-size: 30px;
   font-family: 'Pokemon Solid', sans-serif;
   color: #3763d2;
-  left: 1rem;
+  left: 4rem;
   position: absolute;
 `
 type LayoutProps = {
