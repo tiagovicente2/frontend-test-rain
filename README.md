@@ -1,19 +1,20 @@
-# Rain Instant Pay Frontend Test
+# PokeDex
 
+Web App created for the Frontend Test of the Rain Instant Pay
+
+## Description
 Create a Pokédex that will allow the user to see a list of Pokémons and save its favorites on a separate list.
 
-The application must provide:
-- List of Pokémons on the main page
-    - Capable of filtering by name
-- List of favorite Pokémons
-    - The API can be mocked on the browser’s local storage
-- Code commits either by providing the .git folder or a public repo
-- Automated tests are a good addition but they are not mandatory
+## Usage
+- Clone the repository
+- Run `yarn & yarn start`
+- Open the browser at `localhost:3001`
 
-The API that should be used to get the data is https://pokeapi.co/. We provide the request functions at `src/services` but feel free to modify them as you need.
+## Requirements
+- Node.js
+- Yarn
 
-Suggested designs (the design does not need to be perfect, it only illustrates the idea):
-- https://dribbble.com/shots/6545819-Pokedex-App?utm_source=pinterest&utm_campaign=pinterest_shot&utm_content=Pokedex%20App&utm_medium=Social_Share
-- https://dribbble.com/shots/6580701-HealthDex-A-Pok-mon-Pok-dex-web-application?utm_source=pinterest&utm_campaign=pinterest_shot&utm_content=HealthDex%20-%20A%20Pok%C3%A9mon%20Pok%C3%A9dex%20web%20application&utm_medium=Social_Share
-- https://dribbble.com/shots/14241781-Pok-dex
-- https://dribbble.com/shots/2960136-Poke-dex
+## Screenshots
+![image](https://user-images.githubusercontent.com/100603361/230178010-c7c5b3f6-f8c0-4f3b-b7f7-a8f1e8b1b5f0.png)
+![image](https://user-images.githubusercontent.com/100603361/230178021-c7c5b3f6-f8c0-4f3b-b7f7-a8f1e8b1b5f0.png)
+![image](https://user-images.githubusercontent.com/100603361/230178032-c7c5b3f6-f8c0-4f3b-b7f7-a8f1e8b1b5f0.png)
