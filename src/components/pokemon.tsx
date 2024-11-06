@@ -1,6 +1,16 @@
 import styled from 'styled-components'
+
 import FavIcon from '../assets/favoriteIconFill.svg'
 import UnfavIcon from '../assets/favoriteIcon.svg'
+import LoadingGif from '../assets/loading.gif'
+
+import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { detail } from '../services/pokeapi'
+
+import { Loading } from '../pages/Pokedex'
+
+const imgSrc =
+  'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon'
 
 const PokemonContainer = styled.div`
   display: flex;
@@ -20,20 +30,39 @@ const PokemonContainer = styled.div`
   border-color: #3763d2;
 `
 
-const Id = styled.h1`
+const ColumnWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  height: 100%;
+  justify-content: space-evenly;
+`
+
+const Name = styled.h1`
   font-size: 20px;
   font-weight: bold;
-  color: #3763d2;
-`
-const Name = styled.h3`
-  font-size: 18px;
-  font-weight: bold;
-  color: #3763d2;
+  color: #000;
 
   text-transform: capitalize;
+  margin: 0;
+  margin-bottom: 5px;
 `
+
+const Id = styled.h3`
+  font-size: 15px;
+  font-weight: bold;
+  color: #000;
+
+  margin: 0;
+`
+
 const Image = styled.img`
   height: 120px;
+  max-width: 120px;
+`
+
+const Gif = styled.img`
+  width: 50px;
 `
 
 const Icon = styled.img`
@@ -54,28 +83,30 @@ export interface PokemonProps {
 }
 
 const Pokemon = (props: PokemonProps) => {
-  const { id, name, image, handleFavorite, favorited } = props
+  const { id, name, handleFavorite, favorited } = props
 
   const icon = favorited ? FavIcon : UnfavIcon
-  const imageSrc =
-    image ||
-    `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`
+  const primaryImage = `${imgSrc}/other/official-artwork/${id}.png`
+  const secondaryImage = `${imgSrc}/versions/generation-v/black-white/animated/${id}.gif`
 
   const poke: PokemonProps = {
     id,
     name,
-    image: imageSrc,
+    image: primaryImage,
     favorited
   }
 
   return (
     <PokemonContainer key={id}>
       <Icon src={icon} onClick={() => handleFavorite && handleFavorite(poke)} />
-      <div>
-        <Id>#{id.toString().padStart(4, '0')}</Id>
-        <Name>{name}</Name>
-      </div>
-      <Image src={imageSrc} />
+      <ColumnWrapper>
+        <div>
+          <Name>{name}</Name>
+          <Id>#{id.toString().padStart(4, '0')}</Id>
+        </div>
+        <Gif src={secondaryImage} />
+      </ColumnWrapper>
+      <Image src={primaryImage} />
     </PokemonContainer>
   )
 }

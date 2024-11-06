@@ -26,16 +26,9 @@ const FavoritesPage = () => {
     setFilteredPoke(favPoke)
   }, [favPoke])
 
-  console.log(filteredPoke, favPoke)
-
   return (
     <Layout activeMenu="favorites">
       <SearchBar onSearch={handleSearch} />
-      {/* <Pokemons
-        pokes={filteredPoke}
-        favPoke={favPoke}
-        handleFavorite={handleFavorite}
-      /> */}
       <PokemonsContainer>
         {filteredPoke.map((items: PokemonProps) => {
           return (

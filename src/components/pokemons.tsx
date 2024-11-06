@@ -1,6 +1,8 @@
 import styled from 'styled-components'
 
 import Pokemon, { PokemonProps } from './pokemon'
+import React from 'react'
+import { PokeApiResponse } from '../services/pokeapi'
 
 export const PokemonsContainer = styled.div`
   display: grid;
@@ -10,11 +12,11 @@ export const PokemonsContainer = styled.div`
 
   justify-items: center;
   width: 80%;
-  margin-top: 1rem;
+  margin: 1rem 0;
 `
 
 interface PokemonsProps {
-  pokes: { name: string; url: string }[]
+  pokes: PokeApiResponse[]
   favPoke: PokemonProps[]
   handleFavorite: (poke: PokemonProps) => void
 }
@@ -24,22 +26,26 @@ const Pokemons = (props: PokemonsProps) => {
 
   return (
     <PokemonsContainer>
-      {pokes?.map((pokemon, index) => {
-        const hash = Number(pokemon?.url?.split('/').at(-2)) || index
-        const favorited = !!favPoke?.find(
-          (poke: PokemonProps) => poke.id === hash
-        )
+      {pokes.map((group, i) => (
+        <React.Fragment key={i}>
+          {group?.results.map((pokemon, index) => {
+            const hash = Number(pokemon?.url?.split('/').at(-2)) || index
+            const favorited = !!favPoke?.find(
+              (poke: PokemonProps) => poke.id === hash
+            )
 
-        return (
-          <Pokemon
-            key={hash}
-            id={hash}
-            name={pokemon.name}
-            handleFavorite={handleFavorite}
-            favorited={favorited}
-          />
-        )
-      })}
+            return (
+              <Pokemon
+                key={hash}
+                id={hash}
+                name={pokemon.name}
+                handleFavorite={handleFavorite}
+                favorited={favorited}
+              />
+            )
+          })}
+        </React.Fragment>
+      ))}
     </PokemonsContainer>
   )
 }

@@ -76,21 +76,21 @@ const Text = styled.p`
 const LoginPage = () => {
   const { user, login } = useAuth()
 
-  const [username, setUsername] = useState('')
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  const disabled = !!username && !!password
+  const disabled = !!email && !!password
 
   if (user) return <Navigate to="/" />
 
   const handleLogin = async (e: any) => {
     e.preventDefault()
 
-    if (username === 'user' && password === 'user') {
+    if (email === 'user@mail.com' && password === 'user') {
       return login()
     }
 
-    return alert('Invalid username or password')
+    return alert('Invalid email or password')
   }
 
   return (
@@ -113,13 +113,14 @@ const LoginPage = () => {
         }}
         onSubmit={handleLogin}
       >
-        <Label htmlFor="username">Username:</Label>
+        <Label htmlFor="email">Email:</Label>
         <Input
-          id="username"
-          type="text"
-          value={username}
-          placeholder="your username"
-          onChange={(e) => setUsername(e.target.value)}
+          id="email"
+          type="email"
+          value={email}
+          placeholder="your email"
+          onChange={(e) => setEmail(e.target.value)}
+          required
         />
 
         <Label htmlFor="password">Password:</Label>
@@ -129,6 +130,7 @@ const LoginPage = () => {
           value={password}
           placeholder="your password"
           onChange={(e) => setPassword(e.target.value)}
+          required
         />
         <Button type="submit" disabled={!disabled}>
           Login
