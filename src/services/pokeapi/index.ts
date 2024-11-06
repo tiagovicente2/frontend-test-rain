@@ -11,11 +11,12 @@ export type PokeApiResponse = {
   }[]
 }
 
-const list = async (cursor: any) => {
-  const url = cursor ? cursor : `${endpoint}/pokemon?offset=0&limit=20`
+const list = async (cursor: any, limit: number): Promise<PokeApiResponse> => {
+  const url = cursor ? cursor : `${endpoint}/pokemon?offset=0&limit=${limit}`
 
   const res = await fetch(url)
-  return res.json()
+  const data = await res.json()
+  return data as PokeApiResponse
 }
 
 const detail = async (url: string) => {

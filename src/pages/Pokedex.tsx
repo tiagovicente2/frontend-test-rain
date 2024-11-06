@@ -1,5 +1,9 @@
-import { useRef, useState } from 'react'
-import { useInfiniteQuery } from '@tanstack/react-query'
+import { useMemo, useRef, useState } from 'react'
+import {
+  useInfiniteQuery,
+  useQuery,
+  useQueryClient
+} from '@tanstack/react-query'
 
 import styled from 'styled-components'
 
@@ -11,7 +15,7 @@ import LoadingGif from '../assets/loading.gif'
 
 import useLocalStorage from '../hooks/useLocalStorage'
 
-import { list } from '../services/pokeapi'
+import { list, PokeApiResponse } from '../services/pokeapi'
 import useIntersection from '../hooks/useIntersection'
 import { Button } from './Login'
 
@@ -20,22 +24,43 @@ export const Loading = styled.img`
 `
 
 const Pokedex = () => {
-  const {
-    data,
-    error,
-    fetchNextPage,
-    hasNextPage,
-    isFetching,
-    isFetchingNextPage
-  } = useInfiniteQuery({
+  const [favPoke, setFavPoke] = useLocalStorage('favPoke', [])
+  const [searchTerm, setSearch] = useState('')
+
+  const loadMoreBtn = useRef<HTMLButtonElement>(null)
+
+  const unfilteredPokemons = useInfiniteQuery<PokeApiResponse>({
     queryKey: ['pokemons'],
-    queryFn: ({ pageParam }) => list(pageParam),
+    queryFn: ({ pageParam }) => list(pageParam, 20),
     initialPageParam: 0,
     getNextPageParam: (last) => last.next
   })
 
-  const [favPoke, setFavPoke] = useLocalStorage('favPoke', [])
-  const [searchTerm, setSearch] = useState('')
+  const filteredPokemons = useInfiniteQuery<PokeApiResponse>({
+    queryKey: ['filteredPokemons', searchTerm],
+    queryFn: async ({ pageParam }) => {
+      const response = await list(pageParam, 300)
+      return {
+        ...response,
+        results: response.results.filter((pokemon: any) =>
+          pokemon.name.toLowerCase().includes(searchTerm.toLowerCase())
+        )
+      }
+    },
+    initialPageParam: 0,
+    getNextPageParam: (last) => last.next,
+    enabled: searchTerm.length > 0
+  })
+
+  const nextPage =
+    searchTerm.length > 0
+      ? filteredPokemons.fetchNextPage
+      : unfilteredPokemons.fetchNextPage
+
+  const hasNextPage =
+    searchTerm.length > 0
+      ? filteredPokemons.hasNextPage
+      : unfilteredPokemons.hasNextPage
 
   const handleSearch = (searchTerm: string) => {
     setSearch(searchTerm)
@@ -54,36 +79,39 @@ const Pokedex = () => {
     setFavPoke(sortedFavs)
   }
 
-  const loadMoreBtn = useRef<HTMLButtonElement>(null)
+  const pokemons = useMemo(() => {
+    if (searchTerm) {
+      return filteredPokemons.data?.pages || []
+    }
+    return unfilteredPokemons.data?.pages || []
+  }, [searchTerm, filteredPokemons.data, unfilteredPokemons.data])
 
   useIntersection({
     target: loadMoreBtn,
-    onIntersect: fetchNextPage,
+    onIntersect: nextPage,
     enabled: hasNextPage
   })
 
   return (
     <Layout activeMenu="pokemons">
       <SearchBar onSearch={handleSearch} />
-
-      {error && <div>Something went wrong</div>}
-      {isFetching && <Loading src={LoadingGif} />}
+      {unfilteredPokemons.error && <div>Something went wrong</div>}
 
       <Pokemons
-        pokes={data?.pages || []}
+        pokes={pokemons}
         favPoke={favPoke}
         handleFavorite={handleFavorite}
       />
 
-      {(isFetchingNextPage || isFetching) && <Loading src={LoadingGif} />}
+      {hasNextPage && <Loading src={LoadingGif} />}
 
-      {/* {!isFetching && ( */}
-      <div style={{ width: '100px' }}>
-        <Button ref={loadMoreBtn} onClick={() => fetchNextPage()}>
-          Load more
-        </Button>
-      </div>
-      {/* )} */}
+      {(filteredPokemons.hasNextPage || hasNextPage) && (
+        <div style={{ width: '100px' }}>
+          <Button ref={loadMoreBtn} onClick={() => nextPage()}>
+            Load more
+          </Button>
+        </div>
+      )}
     </Layout>
   )
 }
