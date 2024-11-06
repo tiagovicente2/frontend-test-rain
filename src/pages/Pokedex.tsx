@@ -52,6 +52,13 @@ const Pokedex = () => {
     enabled: searchTerm.length > 0
   })
 
+  const pokemons = useMemo(() => {
+    if (searchTerm) {
+      return filteredPokemons.data?.pages || []
+    }
+    return unfilteredPokemons.data?.pages || []
+  }, [searchTerm, filteredPokemons.data, unfilteredPokemons.data])
+
   const nextPage =
     searchTerm.length > 0
       ? filteredPokemons.fetchNextPage
@@ -61,6 +68,12 @@ const Pokedex = () => {
     searchTerm.length > 0
       ? filteredPokemons.hasNextPage
       : unfilteredPokemons.hasNextPage
+
+  const isLoading =
+    filteredPokemons.isLoading ||
+    unfilteredPokemons.isLoading ||
+    filteredPokemons.isFetching ||
+    unfilteredPokemons.isFetching
 
   const handleSearch = (searchTerm: string) => {
     setSearch(searchTerm)
@@ -79,13 +92,6 @@ const Pokedex = () => {
     setFavPoke(sortedFavs)
   }
 
-  const pokemons = useMemo(() => {
-    if (searchTerm) {
-      return filteredPokemons.data?.pages || []
-    }
-    return unfilteredPokemons.data?.pages || []
-  }, [searchTerm, filteredPokemons.data, unfilteredPokemons.data])
-
   useIntersection({
     target: loadMoreBtn,
     onIntersect: nextPage,
@@ -103,9 +109,9 @@ const Pokedex = () => {
         handleFavorite={handleFavorite}
       />
 
-      {hasNextPage && <Loading src={LoadingGif} />}
+      {isLoading && <Loading src={LoadingGif} />}
 
-      {(filteredPokemons.hasNextPage || hasNextPage) && (
+      {(hasNextPage || isLoading) && (
         <div style={{ width: '100px' }}>
           <Button ref={loadMoreBtn} onClick={() => nextPage()}>
             Load more

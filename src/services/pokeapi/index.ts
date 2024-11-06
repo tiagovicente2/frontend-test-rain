@@ -1,4 +1,3 @@
-import { useCallback } from 'react'
 import { endpoint } from './config'
 
 export type PokeApiResponse = {

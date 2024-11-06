@@ -38,6 +38,7 @@ const Pokemons = (props: PokemonsProps) => {
               <Pokemon
                 key={hash}
                 id={hash}
+                url={pokemon.url}
                 name={pokemon.name}
                 handleFavorite={handleFavorite}
                 favorited={favorited}

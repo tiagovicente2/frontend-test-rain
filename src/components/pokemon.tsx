@@ -9,9 +9,6 @@ import { detail } from '../services/pokeapi'
 
 import { Loading } from '../pages/Pokedex'
 
-const imgSrc =
-  'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon'
-
 const PokemonContainer = styled.div`
   display: flex;
   flex-direction: row;
@@ -76,6 +73,7 @@ const Icon = styled.img`
 
 export interface PokemonProps {
   id: number
+  url: string
   name: string
   image?: string
   handleFavorite?: (props: PokemonProps) => void
@@ -83,17 +81,38 @@ export interface PokemonProps {
 }
 
 const Pokemon = (props: PokemonProps) => {
-  const { id, name, handleFavorite, favorited } = props
+  const { id, url, name, handleFavorite, favorited } = props
+
+  const { data, isLoading, isFetching } = useQuery({
+    queryKey: ['pokemonDetail', id],
+    queryFn: () => detail(url)
+  })
 
   const icon = favorited ? FavIcon : UnfavIcon
-  const primaryImage = `${imgSrc}/other/official-artwork/${id}.png`
-  const secondaryImage = `${imgSrc}/versions/generation-v/black-white/animated/${id}.gif`
+
+  const primaryImage = data?.is_default
+    ? data?.sprites?.other?.dream_world?.front_default
+    : data?.sprites?.front_default
+
+  const secondaryImage =
+    data?.is_default &&
+    data?.sprites?.versions['generation-v']['black-white']?.animated
+      ?.front_default
 
   const poke: PokemonProps = {
     id,
     name,
+    url,
     image: primaryImage,
     favorited
+  }
+
+  if (isLoading || isFetching) {
+    return (
+      <PokemonContainer>
+        <Loading src={LoadingGif} />
+      </PokemonContainer>
+    )
   }
 
   return (
